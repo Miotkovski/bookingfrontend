@@ -26,6 +26,8 @@ function formatLocalDate(date) {
   );
 }
 
+const API = process.env.REACT_APP_API_URL;  // bazowy URL z .env.production
+
 const BookingCalendar = () => {
   const [events, setEvents] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -44,7 +46,7 @@ const BookingCalendar = () => {
 
   const fetchReservations = () => {
     axios
-      .get('http://localhost:5000/api/reservations')
+      .get(`${API}/api/reservations`)
       .then(res => {
         setEvents(
           res.data.map(r => ({
@@ -82,10 +84,13 @@ const BookingCalendar = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/reservations', {
-        ...formData,
-        date_time: formatLocalDate(new Date(selectedDate))
-      });
+      await axios.post(
+        `${API}/api/reservations`,
+        {
+          ...formData,
+          date_time: formatLocalDate(new Date(selectedDate))
+        }
+      );
       setModalIsOpen(false);
       setFormData({ full_name: '', email: '', note: '' });
       fetchReservations();
@@ -100,7 +105,7 @@ const BookingCalendar = () => {
     try {
       const local = formatLocalDate(selectedEvent.start);
       await axios.put(
-        `http://localhost:5000/api/reservations/${selectedEvent.id}`,
+        `${API}/api/reservations/${selectedEvent.id}`,
         { ...formData, date_time: local }
       );
       setEditModalIsOpen(false);
@@ -114,7 +119,7 @@ const BookingCalendar = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/reservations/${selectedEvent.id}`
+        `${API}/api/reservations/${selectedEvent.id}`
       );
       setEditModalIsOpen(false);
       fetchReservations();
