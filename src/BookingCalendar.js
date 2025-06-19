@@ -26,7 +26,7 @@ function formatLocalDate(date) {
   );
 }
 
-const API = process.env.REACT_APP_API_URL;  // bazowy URL z .env.production
+const API = process.env.REACT_APP_API_URL; // <- tutaj baza URL
 
 const BookingCalendar = () => {
   const [events, setEvents] = useState([]);
@@ -53,10 +53,7 @@ const BookingCalendar = () => {
             id: r.id,
             title: r.full_name,
             start: r.date_time,
-            extendedProps: {
-              email: r.email,
-              note: r.note
-            }
+            extendedProps: { email: r.email, note: r.note }
           }))
         );
       })
@@ -131,24 +128,14 @@ const BookingCalendar = () => {
 
   const modalStyle = {
     overlay: {
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: 'rgba(0,0,0,0.6)',
-      zIndex: 2000
+      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 2000
     },
     content: {
-      position: 'absolute',
-      top: '20%',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      zIndex: 2100,
-      maxWidth: '400px',
-      width: '90%',
-      borderRadius: '12px',
-      padding: '20px'
+      position: 'absolute', top: '20%', left: '50%',
+      transform: 'translateX(-50%)', zIndex: 2100,
+      maxWidth: '400px', width: '90%',
+      borderRadius: '12px', padding: '20px'
     }
   };
 
@@ -159,127 +146,68 @@ const BookingCalendar = () => {
       </h2>
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-        initialView="timeGridWeek"
-        selectable={true}
-        editable={false}
-        events={events}
+        initialView="timeGridWeek" selectable events={events}
         height="auto"
         select={handleDateSelect}
         eventClick={handleEventClick}
       />
 
       {/* Dodawanie */}
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        style={modalStyle}
-        contentLabel="Dodaj Rezerwację"
-      >
+      <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}
+             style={modalStyle} contentLabel="Dodaj Rezerwację">
         <h3>Nowa rezerwacja</h3>
         <form onSubmit={handleSubmit}>
-          <input
-            name="full_name"
-            placeholder="Imię i nazwisko"
-            value={formData.full_name}
-            onChange={handleInputChange}
-            required
-            style={{ width: '100%', marginBottom: '10px' }}
-          />
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            style={{ width: '100%', marginBottom: '10px' }}
-          />
-          <textarea
-            name="note"
-            placeholder="Notatka (opcjonalna)"
-            value={formData.note}
-            onChange={handleInputChange}
-            style={{ width: '100%', marginBottom: '10px' }}
-          />
-          <button
-            type="submit"
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#28a745',
-              color: 'white',
-              border: 'none',
-              borderRadius: '6px',
-              cursor: 'pointer'
-            }}
-          >
+          <input name="full_name" placeholder="Imię i nazwisko"
+                 value={formData.full_name} onChange={handleInputChange}
+                 required style={{ width: '100%', marginBottom: '10px' }} />
+          <input name="email" type="email" placeholder="Email"
+                 value={formData.email} onChange={handleInputChange}
+                 required style={{ width: '100%', marginBottom: '10px' }} />
+          <textarea name="note" placeholder="Notatka (opcjonalna)"
+                    value={formData.note} onChange={handleInputChange}
+                    style={{ width: '100%', marginBottom: '10px' }} />
+          <button type="submit"
+                  style={{
+                    padding: '10px 20px', backgroundColor: '#28a745',
+                    color: 'white', border: 'none', borderRadius: '6px',
+                    cursor: 'pointer'
+                  }}>
             Zarezerwuj
           </button>
         </form>
       </Modal>
 
       {/* Edycja */}
-      <Modal
-        isOpen={editModalIsOpen}
-        onRequestClose={() => setEditModalIsOpen(false)}
-        style={modalStyle}
-        contentLabel="Edytuj Rezerwację"
-      >
+      <Modal isOpen={editModalIsOpen} onRequestClose={() => setEditModalIsOpen(false)}
+             style={modalStyle} contentLabel="Edytuj Rezerwację">
         <h3>Edytuj rezerwację</h3>
-        <p>
-          <strong>Godzina:</strong>{' '}
-          {new Date(selectedEvent?.start).toLocaleString()}
-        </p>
+        <p><strong>Godzina:</strong>{' '}
+           {new Date(selectedEvent?.start).toLocaleString()}</p>
         <form onSubmit={handleEditSubmit}>
-          <input
-            name="full_name"
-            placeholder="Imię i nazwisko"
-            value={formData.full_name}
-            onChange={handleInputChange}
-            required
-            style={{ width: '100%', marginBottom: '10px' }}
-          />
-          <input
-            name="email"
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            style={{ width: '100%', marginBottom: '10px' }}
-          />
-          <textarea
-            name="note"
-            placeholder="Notatka"
-            value={formData.note}
-            onChange={handleInputChange}
-            style={{ width: '100%', marginBottom: '10px' }}
-          />
+          <input name="full_name" placeholder="Imię i nazwisko"
+                 value={formData.full_name} onChange={handleInputChange}
+                 required style={{ width: '100%', marginBottom: '10px' }} />
+          <input name="email" type="email" placeholder="Email"
+                 value={formData.email} onChange={handleInputChange}
+                 required style={{ width: '100%', marginBottom: '10px' }} />
+          <textarea name="note" placeholder="Notatka"
+                    value={formData.note} onChange={handleInputChange}
+                    style={{ width: '100%', marginBottom: '10px' }} />
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <button
-              type="submit"
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer'
-              }}
-            >
+            <button type="submit"
+                    style={{
+                      padding: '10px 20px', backgroundColor: '#007bff',
+                      color: 'white', border: 'none', borderRadius: '6px',
+                      cursor: 'pointer'
+                    }}>
               Zapisz zmiany
             </button>
-            <button
-              type="button"
-              onClick={handleDelete}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: '#dc3545',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer'
-              }}
-            >
+            <button type="button" onClick={handleDelete}
+                    style={{
+                      padding: '10px 20px', backgroundColor: '#dc3545',
+                      color: 'white', border: 'none', borderRadius: '6px',
+                      cursor: 'pointer'
+                    }}>
               Usuń
             </button>
           </div>
